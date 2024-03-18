@@ -6,56 +6,76 @@
 	    <title>综合应用管理平台</title>
 	    <link th:href="@{/css/filemanager.css}" rel="stylesheet" type="text/css" />
 	    <script th:src="@{/scripts/boot.js}" type="text/javascript" charset="utf-8"></script>
-	    
+	    <style type="text/css">
+		    body{
+		        margin:0;padding:0;border:0;width:100%;height:100%;overflow:hidden;
+		    }    
+		  
+		</style>
 	</head>
 	<body>
-	    <div style="width:700px;border:solid 1px #9da0aa;font-size:12px;font-family:Verdana;color:#201F35;overflow:hidden;">
-	        <div class="mini-toolbar" style="border:0;border-bottom:solid 1px #9da0aa;padding:5px;">
-	            <table style="width:100%;">
-	                <tr>
-	                <td style="width:auto;">
-	                    <a class="mini-button" iconCls="icon-addfolder" plain="true">增加</a>
-	                    <a class="mini-button" iconCls="icon-edit" plain="true">修改</a>
-	                    <a class="mini-button" iconCls="icon-remove" plain="true">删除</a>
-	                    <span class="separator"></span>
-	                    <a class="mini-button" iconCls="icon-reload" plain="true">刷新</a>
-	                    <a class="mini-button" iconCls="icon-download" plain="true">下载</a>
-	                </td>
-	                <td style="white-space:nowrap;width:220px;"><label>Filter by: </label><input class="mini-textbox" /></td>                
-	                </tr>
-	            </table>
-	        </div>
-	        <div class="mini-splitter" handlerSize="2" showHandleButton="false" style="width:100%;height:300px;" borderStyle="border:0">
-	            <div size="205" maxSize="350" minSize="150" style="border:0;">
-	                <ul id="folderTree" url="/loadFiles" class="mini-tree" style="width:100%;height:100%;" showTreeIcon="true" leafIcon="mini-tree-folder"
-	                    textField="name" idField="id" parentField="pid" resultAsTree="false"
-	                    ondataload="onTreeDataLoad" onnodeselect="onSelectNode"
-	                >                   
-	                </ul>
-	            </div>
-	            <div >
-	                <div id="filesDataView" style="width:100%;height:100%;overflow:auto;display:none;">
-	                    <div id="filesView" class="filesView">
-	                    </div>
-	                </div>
-	                <div id="filesListBox" textField="name" class="mini-listbox" 
-	                    style="width:100%;height:100%;overflow:auto;display:none;" borderStyle="border:0;">
-	                    <div property="columns">
-	                        <div field="name" width="auto">名称</div>
-	                        <div field="updatedate" width="100">修改日期</div>
-	                        <div field="type" width="100">类型</div>
-	                        <div field="size" width="100">大小</div>
-	                    </div>
-	                </div>
-	            </div>        
-	        </div>
-	    </div>
+	    <div id="layout1" class="mini-layout" style="width:100%;height:100%;">
+		    <div class="app-header" region="north" height="70" showSplit="false" showHeader="false">
+		        <h1 style="margin:0;padding:15px;cursor:default;font-family:微软雅黑,黑体,宋体;">个人网盘管理系统</h1>
+		        <div style="position:absolute;top:12px;right:10px;">
+		            <a class="mini-button mini-button-iconTop" iconCls="icon-add" onclick="onQuickClick" plain="true">快捷</a>    
+		            <a class="mini-button mini-button-iconTop" iconCls="icon-edit" onclick="onClick"  plain="true" >首页</a>        
+		            <a class="mini-button mini-button-iconTop" iconCls="icon-date" onclick="onClick"  plain="true" >消息</a>        
+		            <a class="mini-button mini-button-iconTop" iconCls="icon-edit" onclick="onClick"  plain="true" >设置</a>        
+		            <a class="mini-button mini-button-iconTop" iconCls="icon-close" onclick="onClick"  plain="true" >关闭</a>        
+		        </div>
+		        
+		    </div>
+		    <div id="center" title="center" region="center" style="border:0;" bodyStyle="overflow:hidden;" >
+		         <div style="width:100%;border:solid 1px #9da0aa;font-size:12px;font-family:Verdana;color:#201F35;overflow:hidden;">
+			        <div id="toolbar" class="mini-toolbar" style="border:0;border-bottom:solid 1px #9da0aa;padding:5px;">
+			            <table style="width:100%;">
+			                <tr>
+			                <td style="width:auto;">
+			                    <a class="mini-button" iconCls="icon-addfolder" plain="true">增加</a>
+			                    <a class="mini-button" iconCls="icon-edit" plain="true">修改</a>
+			                    <a class="mini-button" iconCls="icon-remove" plain="true">删除</a>
+			                    <span class="separator"></span>
+			                    <a class="mini-button" iconCls="icon-reload" plain="true">刷新</a>
+			                    <a class="mini-button" iconCls="icon-download" plain="true">下载</a>
+			                </td>
+			                <td style="white-space:nowrap;width:420px;"><label>搜索: </label><input class="mini-textbox" style="width:300px;" emptyText="输入回车进行搜索"/></td>                
+			                <td style="white-space:nowrap;width:420px;"></td>
+			                </tr>
+			            </table>
+			        </div>
+			        <div id="content" class="mini-splitter" handlerSize="2" showHandleButton="false" style="width:100%;height:100px;" borderStyle="border:0">
+			            <div size="205" maxSize="350" minSize="150" style="border:0;">
+			                <ul id="folderTree" class="mini-tree" style="width:100%;height:100%;" showTreeIcon="true" leafIcon="mini-tree-folder"
+			                    textField="name" idField="id" parentField="pid" resultAsTree="false"
+			                    ondataload="onTreeDataLoad" onnodeselect="onSelectNode"
+			                >                   
+			                </ul>
+			            </div>
+			            <div >
+			                <div id="filesDataView" style="width:100%;height:100%;overflow:auto;display:none;">
+			                    <div id="filesView" class="filesView">
+			                    </div>
+			                </div>
+			                <div id="filesListBox" textField="name" class="mini-listbox" 
+			                    style="width:100%;height:100%;overflow:auto;display:none;" borderStyle="border:0;">
+			                    <div property="columns">
+			                        <div field="name" width="auto">名称</div>
+			                        <div field="updatedate" width="100">修改日期</div>
+			                        <div field="type" width="100">类型</div>
+			                        <div field="size" width="100">大小</div>
+			                    </div>
+			                </div>
+			            </div>        
+			        </div>
+			    </div>
+			</div>
 	    <script th:inline="javascript">
 		//<![CDATA[
 		    mini.parse();
-		
+		    $('#content').css({'height':$('#center').height()-$('#toolbar').height()+'px'})
 		    var ViewType = "image"; //list, image
-		
+
 		    ////////////////////////////////////////
 		    function refreshFiles(data) {
 		        if (!data) data = [];
@@ -90,25 +110,20 @@
 		    }
 		
 		    var folderTree = mini.get("folderTree");
-			//folderTree.load("/loadFiles");
-			
+		
 		    function showFiles(folderId) {
 		        //var messageid = mini.loading("Loading, Please wait ...", "Loading");
 		        $.ajax({
-		            url: "http://miniui.com/demo/data/FileService.aspx?method=LoadFiles&folderId=" + folderId,
+		            url: "../data/FileService.aspx?method=LoadFiles&folderId=" + folderId,
 		            success: function (text) {
 		                var files = mini.decode(text);
 		                refreshFiles(files);
-		            },
-		            error: function(xhr, status, error) {
-					    // 请求失败时的回调函数
-					    console.error('Error:', error);
-					}
+		            }
 		        });
 		    }
 		
 		    function onSelectNode(e) {
-		        //if (e.node) showFiles(e.node.id);
+		        if (e.node) showFiles(e.node.id);
 		    }
 		
 		    function onTreeDataLoad(e) {
@@ -116,6 +131,9 @@
 		        folderTree.selectNode(node);
 		        showFiles(node.id);
 		    }
+		
+		
+		    folderTree.load("/loadFiles");
 		    
 		    //]]>
 		</script>
