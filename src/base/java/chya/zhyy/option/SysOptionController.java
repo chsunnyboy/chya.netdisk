@@ -16,7 +16,7 @@ import chya.zhyy.RequestResult;
 @RequestMapping(SysOptionController.FUNC_PATH)
 public class SysOptionController {
 	private final Log log = LogFactory.getLog(getClass());
-	public static final String FUNC_PATH = "/SYS003";
+	public static final String FUNC_PATH = "/SYS002";
 	 
 	@Autowired SysOptionService service;
 	

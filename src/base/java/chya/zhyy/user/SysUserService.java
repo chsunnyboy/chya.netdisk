@@ -3,7 +3,6 @@ package chya.zhyy.user;
 import java.util.Map;
 
 import chya.zhyy.PageResult;
-import chya.zhyy.organise.SysOrganiseModel;
 
 public interface SysUserService {
 	public final static String SERVICE_NAME="sysUserService";

@@ -20,20 +20,16 @@ import com.alibaba.fastjson.JSONObject;
 import chya.zhyy.BaseController;
 import chya.zhyy.PageResult;
 import chya.zhyy.RequestResult;
-import chya.zhyy.organise.SysOrganiseModel;
-import chya.zhyy.organise.SysOrganiseService;
+
 
 @Controller
 @RequestMapping(SysUserController.FUNC_PATH)
 public class SysUserController extends BaseController{
 	private final Log log = LogFactory.getLog(getClass());
-	public static final String FUNC_PATH = "/SYS002";
+	public static final String FUNC_PATH = "/SYS001";
 	 
 	@Autowired 
 	SysUserService service;
-	
-	@Autowired 
-	SysOrganiseService organiseService;
 	
 	@ModelAttribute("funcPath")
     public String funcPath() {
@@ -50,13 +46,6 @@ public class SysUserController extends BaseController{
 	@RequestMapping("/")
 	public String home(Model modle) {
 		return "chya/zhyy/user/home";
-	}
-	
-	@RequestMapping("/loadOrganise")
-	@ResponseBody
-	List<Map<String,Object>> loadOrganise() throws Exception{
-		List<Map<String,Object>> result = organiseService.loadOrganise();
-		return result;
 	}
 	
 	@RequestMapping("/search")

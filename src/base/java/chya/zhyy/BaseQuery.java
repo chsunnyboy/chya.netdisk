@@ -74,7 +74,7 @@ public class BaseQuery implements Serializable {
 		int size = Integer.valueOf(this.getPageSize());
 		int start = Integer.valueOf(this.getPageIndex());
 		if(size > 0){
-			orderAndLimit+= " offset "+start*size+" limit "+ size;
+			orderAndLimit+= " limit "+ size +" offset "+start*size;
 		}
 		return orderAndLimit;
 	}

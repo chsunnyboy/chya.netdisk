@@ -88,7 +88,7 @@ public class SysFuncGroupServiceImpl extends BaseService<SysFuncGroupQuery> impl
 	private Integer getOrderNo() throws Exception{
 		String sql="select coalesce(max(order_no),0)+1 as order_no from sys_func_group";
 		Map<String, Object> map = select.doQueryOne(sql);
-		Integer orderNo=(Integer)map.get("order_no");
+		Integer orderNo=((Long)map.get("order_no")).intValue();
 		return orderNo;
 	}
 

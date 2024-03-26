@@ -41,14 +41,14 @@ public class SysFuncServiceImpl extends BaseService<SysFuncQuery> implements Sys
 	@Override
 	public String getSelect(SysFuncQuery t) throws Exception {
 		StringBuffer sql=new StringBuffer();
-		sql.append(" select * ");
+		sql.append(" select f.*,fg.group_name ");
 		return sql.toString();
 	}
 
 	@Override
 	public String getFrom(SysFuncQuery t) throws Exception {
 		StringBuffer sql=new StringBuffer();
-		sql.append(" from sys_func ");
+		sql.append(" from sys_func f left join sys_func_group fg on f.group_id=fg.id ");
 		return sql.toString();
 	}
 
@@ -57,18 +57,18 @@ public class SysFuncServiceImpl extends BaseService<SysFuncQuery> implements Sys
 		// TODO Auto-generated method stub
 		StringBuffer sql=new StringBuffer("where 1=1");
 		if(!StringUtils.isEmpty(query.getKeyword())) {
-			sql.append(" and (func_code like '%"+query.getKeyword().trim()+"%'");
-			sql.append(" or func_name like '%"+query.getKeyword().trim()+"%'");
+			sql.append(" and (f.func_code like '%"+query.getKeyword().trim()+"%'");
+			sql.append(" or f.func_name like '%"+query.getKeyword().trim()+"%'");
 			sql.append(")");
 		}
 		if(!StringUtils.isEmpty(query.getFuncCode())) {
-			sql.append(" and func_code='"+query.getFuncCode().trim()+"'");
+			sql.append(" and f.func_code='"+query.getFuncCode().trim()+"'");
 		}
 		if(!StringUtils.isEmpty(query.getFuncName())) {
-			sql.append(" and func_name='"+query.getFuncName().trim()+"'");
+			sql.append(" and f.func_name='"+query.getFuncName().trim()+"'");
 		}
 		if(query.getGroupId()!=null) {
-			sql.append(" and group_id="+query.getGroupId());
+			sql.append(" and f.group_id="+query.getGroupId());
 		}
 		return sql.toString();
 	}
@@ -105,7 +105,7 @@ public class SysFuncServiceImpl extends BaseService<SysFuncQuery> implements Sys
 	private Integer getOrderNo(Integer groupId) throws Exception{
 		String sql="select coalesce(max(order_no),0)+1 as order_no from sys_func where group_id="+groupId;
 		Map<String, Object> map = select.doQueryOne(sql);
-		Integer orderNo=(Integer)map.get("order_no");
+		Integer orderNo=((Long)map.get("order_no")).intValue();
 		return orderNo;
 	}
 
@@ -133,8 +133,8 @@ public class SysFuncServiceImpl extends BaseService<SysFuncQuery> implements Sys
 		sql.append(" left join sys_user users on userRole.user_id=users.id");
 		sql.append(" where func.status=1");
 		sql.append(" and funcGroup.status=1");
-		sql.append(" and role.status=1");
-		sql.append(" and users.status=1");
+//		sql.append(" and role.status=1");
+//		sql.append(" and users.status=1");
 		LoginUser loginuser=LoginUser.getLoginUser();
 		if(loginuser!=null && !loginuser.isAdmin()) {
 			sql.append(" and user.id="+loginuser.getId());

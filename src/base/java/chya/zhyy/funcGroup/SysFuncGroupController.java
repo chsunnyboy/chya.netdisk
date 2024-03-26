@@ -23,7 +23,7 @@ import chya.zhyy.RequestResult;
 @RequestMapping(SysFuncGroupController.FUNC_PATH)
 public class SysFuncGroupController extends BaseController{
 	private final Log log = LogFactory.getLog(getClass());
-	public static final String FUNC_PATH = "/SYS004";
+	public static final String FUNC_PATH = "/SYS003";
 	 
 	@Autowired SysFuncGroupService service;
 	

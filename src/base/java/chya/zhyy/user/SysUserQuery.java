@@ -8,15 +8,6 @@ public class SysUserQuery extends BaseQuery {
 
 	private String userCode;
 	private String userName;
-	private Integer orgId;
-	
-	public Integer getOrgId() {
-		return orgId;
-	}
-
-	public void setOrgId(Integer orgId) {
-		this.orgId = orgId;
-	}
 
 	public String getUserCode() {
 		return userCode;

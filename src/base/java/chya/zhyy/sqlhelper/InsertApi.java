@@ -24,7 +24,7 @@ public class InsertApi {
 	@Autowired
 	private JdbcTemplate jdbc;
 
-	public List<Integer> doInsert(String tableName, String seqName, List<Map<String, Object>> args, Boolean flag) throws Exception {
+	public void doInsert(String tableName, String seqName, List<Map<String, Object>> args, Boolean flag) throws Exception {
 		log.info("InsertHelper.tableName:" + tableName);
 
 		// uuiID
@@ -73,10 +73,10 @@ public class InsertApi {
 				}
 
 				// uuid
-				if (!insertColumnList.contains("id")) {
-					columnBuffer.append("id,");
-					valueBuffer.append("?,");
-				}
+//				if (!insertColumnList.contains("id")) {
+//					columnBuffer.append("id,");
+//					valueBuffer.append("?,");
+//				}
 
 				String column = columnBuffer.substring(0, columnBuffer.length() - 1);
 				String value = valueBuffer.substring(0, valueBuffer.length() - 1);
@@ -96,16 +96,16 @@ public class InsertApi {
 			// 绑定参数
 			// 绑定参数
 			Object[] columnArgs = null;
-			if (insertColumnList.contains("id")) {
-				columnArgs = new Object[insertColumnList.size()];
-			} else {
-				columnArgs = new Object[insertColumnList.size() + 1];
-				// id
-				Integer id= getSequenceId(seqName);
-				idList.add(id);
-				columnArgs[insertColumnList.size()] = id;
-			}
-
+//			if (insertColumnList.contains("id")) {
+//				columnArgs = new Object[insertColumnList.size()];
+//			} else {
+//				columnArgs = new Object[insertColumnList.size() + 1];
+//				// id
+//				Integer id= getSequenceId(seqName);
+//				idList.add(id);
+//				columnArgs[insertColumnList.size()] = id;
+//			}
+			columnArgs = new Object[insertColumnList.size()];
 			for (int i = 0; i < insertColumnList.size(); i++) {
 				String column = insertColumnList.get(i);
 				Object value = null;
@@ -123,7 +123,6 @@ public class InsertApi {
 			log.info("InsertHelper.doInsert");
 			jdbc.batchUpdate(insertSql, insertArgs);
 		}
-		return idList;
 	}
 
 	/**
@@ -134,11 +133,11 @@ public class InsertApi {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Integer> doInsert(String tableName, List<Map<String, Object>> args, Boolean flag) throws Exception {
+	public void doInsert(String tableName, List<Map<String, Object>> args, Boolean flag) throws Exception {
 		log.info("InsertHelper.tableName:" + tableName);
 		// 取ID
 		String seqName = tableName + "_id_seq";
-		return doInsert(tableName, seqName, args, flag);
+		doInsert(tableName, seqName, args, flag);
 	}
 
 	/**
@@ -149,8 +148,8 @@ public class InsertApi {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Integer> doInsert(String tableName, List<Map<String, Object>> args) throws Exception {
-		return doInsert(tableName, args, true);
+	public void doInsert(String tableName, List<Map<String, Object>> args) throws Exception {
+		doInsert(tableName, args, true);
 	}
 
 	/**
@@ -161,15 +160,11 @@ public class InsertApi {
 	 * @return
 	 * @throws Exception
 	 */
-	public Integer doInsert(String tableName, Map<String, Object> args, Boolean flag) throws Exception {
+	public void doInsert(String tableName, Map<String, Object> args, Boolean flag) throws Exception {
 		List<Map<String, Object>> list = new ArrayList<>();
 		list.add(args);
-		List<Integer> idList = doInsert(tableName, list, flag);
-		Integer id = null;
-		if (idList != null && idList.size() > 0) {
-			id = idList.get(0);
-		}
-		return id;
+		doInsert(tableName, list, flag);
+		
 	}
 
 	/**
@@ -180,8 +175,8 @@ public class InsertApi {
 	 * @return
 	 * @throws Exception
 	 */
-	public Integer doInsert(String tableName, Map<String, Object> args) throws Exception {
-		return doInsert(tableName, args, true);
+	public void doInsert(String tableName, Map<String, Object> args) throws Exception {
+		doInsert(tableName, args, true);
 	}
 
 	/**
@@ -193,15 +188,10 @@ public class InsertApi {
 	 * @return
 	 * @throws Exception
 	 */
-	public Integer doInsert(String tableName, String seqName, Map<String, Object> args, Boolean flag) throws Exception {
+	public void doInsert(String tableName, String seqName, Map<String, Object> args, Boolean flag) throws Exception {
 		List<Map<String, Object>> list = new ArrayList<>();
 		list.add(args);
-		List<Integer> idList = doInsert(tableName, seqName, list, flag);
-		Integer id = null;
-		if (idList != null && idList.size() > 0) {
-			id = idList.get(0);
-		}
-		return id;
+		doInsert(tableName, seqName, list, flag);
 	}
 
 	/**
@@ -213,8 +203,8 @@ public class InsertApi {
 	 * @return
 	 * @throws Exception
 	 */
-	public Integer doInsert(String tableName, String seqName, Map<String, Object> args) throws Exception {
-		return doInsert(tableName, seqName, args, true);
+	public void doInsert(String tableName, String seqName, Map<String, Object> args) throws Exception {
+		doInsert(tableName, seqName, args, true);
 	}
 
 	/**
@@ -235,20 +225,8 @@ public class InsertApi {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Integer> insert(String tableName, List<Map<String, Object>> args, Boolean flag) throws Exception{
-		List<Integer> list = this.doInsert(tableName, args, flag);
-		// 根据uuid查询数据，返回id
-		String sql = "select distinct id from " + tableName;
-		List<Map<String, Object>> idMapList = jdbc.queryForList(sql);
-
-		List<Integer> idList = new ArrayList<>();
-		idMapList.forEach(t -> {
-			Integer id = Integer.valueOf(t.get("id") + "");
-			idList.add(id);
-		});
-
-		// 返回结果
-		return idList;
+	public void insert(String tableName, List<Map<String, Object>> args, Boolean flag) throws Exception{
+		this.doInsert(tableName, args, flag);
 	}
 
 	/**
@@ -259,16 +237,12 @@ public class InsertApi {
 	 * @return
 	 * @throws Exception
 	 */
-	public Integer insert(String tableName, Map<String, Object> args, Boolean flag) throws Exception {
+	public void insert(String tableName, Map<String, Object> args, Boolean flag) throws Exception {
 		List<Map<String, Object>> list = new ArrayList<>();
 		list.add(args);
 
-		List<Integer> idList = insert(tableName, list, flag);
-		Integer id = null;
-		if (idList != null && idList.size() > 0) {
-			id = idList.get(0);
-		}
-		return id;
+		insert(tableName, list, flag);
+		
 	}
 
 	/**
@@ -278,8 +252,8 @@ public class InsertApi {
 	 * @return
 	 * @throws Exception
 	 */
-	public Integer insert(String tableName, Map<String, Object> args) throws Exception {
-		return insert(tableName, args, true);
+	public void insert(String tableName, Map<String, Object> args) throws Exception {
+		insert(tableName, args, true);
 	}
 
 	/**

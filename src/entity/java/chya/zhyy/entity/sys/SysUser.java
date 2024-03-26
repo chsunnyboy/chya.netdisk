@@ -38,11 +38,6 @@ public class SysUser extends BaseEntity{
     @Title("ID")
     @Column(precision = 10)
     private Integer id;
-
-    @Title("组织机构")
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "org_id", nullable = true)
-    private SysOrganise organise;
     
     @Title("用户编码")
     @Column(name = "user_code",length = 100, nullable = false,unique=true)
@@ -125,14 +120,6 @@ public class SysUser extends BaseEntity{
     public void setAdmin(Boolean admin) {
         this.admin = admin;
     }
-
-	public SysOrganise getOrganise() {
-		return organise;
-	}
-
-	public void setOrganise(SysOrganise organise) {
-		this.organise = organise;
-	}
 
 	public Integer getStatus() {
 		return status;

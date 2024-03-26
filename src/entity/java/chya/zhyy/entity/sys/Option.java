@@ -39,9 +39,6 @@ public class Option extends BaseEntity {
 	@Column(name="option_name",nullable = false, length = 50)
 	private String optionName;
 	
-	@Title("用户选项")
-	@Column(name="user_flag",nullable = false)
-	private Boolean userFlag;
 	
 	@OneToMany(mappedBy = "option", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<OptionItem> items;
@@ -68,14 +65,6 @@ public class Option extends BaseEntity {
 
 	public void setOptionName(String optionName) {
 		this.optionName = optionName;
-	}
-
-	public Boolean getUserFlag() {
-		return userFlag;
-	}
-
-	public void setUserFlag(Boolean userFlag) {
-		this.userFlag = userFlag;
 	}
 
 	public List<OptionItem> getItems() {

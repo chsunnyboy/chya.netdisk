@@ -79,7 +79,12 @@ public class MainController {
     	LoginUser user=LoginUser.getLoginUser();
     	model.addAttribute("userName", user.getUserName());
     	model.addAttribute("userRoles",user.getAuthorities());
-    	return "chya/zhyy/main/home2";
+    	if(user.isAdmin()) {
+    		return "chya/zhyy/main/home2-bak";
+    	}else {
+    		return "chya/zhyy/main/home2";
+    	}
+    	
     }
     
     @RequestMapping("/toUpdatePwd")

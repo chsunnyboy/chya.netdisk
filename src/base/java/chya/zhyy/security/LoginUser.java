@@ -19,28 +19,17 @@ public class LoginUser extends User implements Serializable {
 
     private String userCode;
     
-    private Integer customId;
-    
-    private String customName;
-    
-    private Integer retailId;
-    
-    private String retailName;
-
     private boolean admin;
     
-    private Integer userType;
     
     public LoginUser(String username, String password, Collection<? extends GrantedAuthority> authorities) {
         super(username, password, authorities);
-        this.admin = false;
     }
 
     public LoginUser(String username, String password, boolean enabled, boolean accountNonExpired,
                      boolean credentialsNonExpired, boolean accountNonLocked,
                      Collection<? extends GrantedAuthority> authorities) {
         super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
-        this.admin = false;
     }
 
     public static LoginUser getLoginUser() {
@@ -55,7 +44,6 @@ public class LoginUser extends User implements Serializable {
                 }
             }
         }
-
         return user;
     }
 
@@ -90,46 +78,5 @@ public class LoginUser extends User implements Serializable {
     public void setAdmin(boolean admin) {
         this.admin = admin;
     }
-
-	public Integer getUserType() {
-		return userType;
-	}
-
-	public void setUserType(Integer userType) {
-		this.userType = userType;
-	}
-
-	public Integer getCustomId() {
-		return customId;
-	}
-
-	public void setCustomId(Integer customId) {
-		this.customId = customId;
-	}
-
-	public String getCustomName() {
-		return customName;
-	}
-
-	public void setCustomName(String customName) {
-		this.customName = customName;
-	}
-
-	public Integer getRetailId() {
-		return retailId;
-	}
-
-	public void setRetailId(Integer retailId) {
-		this.retailId = retailId;
-	}
-
-	public String getRetailName() {
-		return retailName;
-	}
-
-	public void setRetailName(String retailName) {
-		this.retailName = retailName;
-	}
-	
 	
 }

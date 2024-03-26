@@ -50,53 +50,38 @@
         </table>
     </div>
     
-    <div id="mini-splitter" class="mini-splitter" style="width:100%;height:100%;">
-	    <div size="240" showCollapseButton=false>
-	        <div class="mini-fit">
-	            <ul id="tree" class="mini-tree" th:attr="url=@{{funcPath}/loadOrganise(funcPath=${funcPath})}" style="width:100%;"
-	                showTreeIcon="true" textField="organise_name" idField="id" parentField="parent_org_id" resultAsTree="false" showTreeLines="false"
-	                showCheckBox="false" showFolderCheckBox="false" 
-	            >        
-	            </ul>
-	        </div>
-	    </div>
-	    <div showCollapseButton="false">
-	        <div class="mini-toolbar" style="border-bottom:0;padding:0px;">
-	            <table style="width:100%;">
-	                <tr>
-	                    <td style="width:100%;">
-	                        <a class="mini-button" plain="true" iconCls="icon-add" onclick="doAdd()">新增</a>
-	                        <span class="separator"></span>
-	                        <a class="mini-button" plain="true" iconCls="icon-edit" onclick="doEdit()">编辑</a>
-	                        <span class="separator"></span>
-	                        <a class="mini-button" plain="true" iconCls="icon-remove" onclick="doRemove()">删除</a>
-	                        <span class="separator"></span>
-	                        <a class="mini-button" iconCls="icon-reload" plain="true" onclick="resPwd()">重置密码</a>     
-                			<span class="separator"></span>
-	                        <a class="mini-button" iconCls="icon-user" plain="true" onclick="setUserRoles()">角色维护</a>     
-                			<span class="separator"></span>
-	                    </td>
-	                </tr>
-	            </table>
-	        </div>
-	        <div id="retails" class="mini-fit" >
-	            <div id="datagrid" class="mini-datagrid" th:attr="url=@{{funcPath}/search(funcPath=${funcPath})}" idField="id" allowResize="true"
-			         pageSize="20" showPager="true" multiSelect="true"  selectOnLoad="true" showPagerButtonIcon ="true">
-			        <div property="columns">
-			            <div type="indexcolumn" headerAlign="center" width="30px"></div>
-			            <div type="checkcolumn" width="30px"></div>
-			            <div field="userName" allowSort="true" headerAlign="left" align="left">用户名称</div>
-			            <div field="userCode" allowSort="true" headerAlign="left" align="left" >用户编码</div>
-			            <div field="phoneNo" allowSort="true" headerAlign="left" align="left" >手机号</div>
-			            <div field="status" allowSort="true" headerAlign="center" align="center" renderer="userStatusRender">状态</div>
-			       		<div field="validDate" allowSort="true" headerAlign="center" align="center" renderer="dateRenderer">有效期至</div>
-			            <div field="memo" allowSort="true" headerAlign="center"  align="center">备注</div>
-			            <div field="orderNo" allowSort="true" headerAlign="center"  align="center">序号</div>
-			        </div>
-			    </div> 
-	        </div>
-	    </div>        
-	</div>
+    <div class="mini-toolbar" style="border-bottom:0;padding:0px;">
+        <table style="width:100%;">
+            <tr>
+                <td style="width:100%;">
+                    <a class="mini-button" plain="true" iconCls="icon-add" onclick="doAdd()">新增</a>
+                    <span class="separator"></span>
+                    <a class="mini-button" plain="true" iconCls="icon-edit" onclick="doEdit()">编辑</a>
+                    <span class="separator"></span>
+                    <a class="mini-button" plain="true" iconCls="icon-remove" onclick="doRemove()">删除</a>
+                    <span class="separator"></span>
+                    <a class="mini-button" iconCls="icon-reload" plain="true" onclick="resPwd()">重置密码</a>     
+        			<span class="separator"></span>
+                </td>
+            </tr>
+        </table>
+    </div>
+    
+    <div id="datagrid" class="mini-datagrid" th:attr="url=@{{funcPath}/search(funcPath=${funcPath})}" idField="id" allowResize="true"
+         pageSize="20" showPager="true" multiSelect="true"  selectOnLoad="true" showPagerButtonIcon ="true">
+        <div property="columns">
+            <div type="indexcolumn" headerAlign="center" width="30px">序号</div>
+            <div type="checkcolumn" width="30px"></div>
+            <div field="userName" allowSort="true" headerAlign="left" align="left">用户名称</div>
+            <div field="userCode" allowSort="true" headerAlign="left" align="left" >用户编码</div>
+            <div field="phoneNo" allowSort="true" headerAlign="left" align="left" >手机号</div>
+            <div field="status" allowSort="true" headerAlign="center" align="center" renderer="userStatusRender">状态</div>
+       		<div field="validDate" allowSort="true" headerAlign="center" align="center" renderer="dateRenderer">有效期至</div>
+            <div field="memo" allowSort="true" headerAlign="center"  align="center">备注</div>
+            <div field="orderNo" allowSort="true" headerAlign="center"  align="center">序号</div>
+        </div>
+    </div> 
+    
     
     <div id="editWindow" class="mini-window" title="新增/编辑  用户信息" style="width: 900px;" showModal="true" allowResize="true" allowDrag="true">
         <div id="editForm" class="form">
@@ -119,8 +104,8 @@
                 <tr>
                     <td style="padding-left: 18px;">状态：</td>
                     <td style="padding-top: 8px;">
-                        <input id="status" name="status" th:data="${userStatusP}" textField="value" valueField="key" 
-                        class="mini-combobox" style="width: 200px;" showNullItem="true" nullItemText="..." required="true"/>
+                        <input id="status" name="status" th:data="${userStatusP}" textField="item_name" valueField="item_id" 
+                        class="mini-combobox" style="width: 200px;" showNullItem="true" required="true"/>
                     </td>
                    	<td style="padding-left: 18px;">有效期至：</td>
                     <td style="padding-top: 8px;">
@@ -145,10 +130,10 @@
         //<![CDATA[
         mini.parse();
         var funcPath=/*[[${funcPath}]]*/;
-        $('#mini-splitter').css({'height':$('html').height()-70+'px'})
+        
         $('#datagrid').css({'height':$('html').height()-110+'px'})
         var grid = mini.get("datagrid");
-        var tree = mini.get("tree");
+        
         var editWindow = mini.get("editWindow");
 
         $(function(){
@@ -159,23 +144,10 @@
         function search(){
          	var form = new mini.Form("#searchForm");
          	var formData = form.getData();      //获取表单多个控件的数据
-         	
-         	var node=tree.getSelectedNode();
-            if(node){
-            	formData.orgId=node.id;
-            }
             grid.load(formData,function(data){
-                
             });
         }
         
-        tree.on("nodeselect", function (e) {
-          	var form = new mini.Form("#searchForm");
-          	var formData = form.getData();
-          	formData.orgId=e.node.id;
-              	grid.load(formData,function(data){
-            });
-        });
         function dateRenderer(e){
         	var date = new Date(e.value);
         	var year=date.getFullYear();
@@ -192,19 +164,14 @@
         function userStatusRender(e){
         	for(var i=0;i<userStatus.length;i++){
         		var g=userStatus[i];
-        		if(g.key==e.value)return g.value;
+        		if(g.item_id==e.value)return g.item_name;
         	}
         }
         // 点增加按钮
         function doAdd(){
-        	var node=tree.getSelectedNode();
-            if(!node){
-            	mini.alert("请选择左侧节点！");
-            	return;
-            }
-            editWindow.show();
-            var eidtform = new mini.Form("#editForm");
+        	var eidtform = new mini.Form("#editForm");
             eidtform.clear();
+            editWindow.show();
         }
 
         // 编辑
@@ -290,9 +257,6 @@
             
             var messageId = mini.loading("保存中，请稍后......");
             var formData=form.getData();
-            var node=tree.getSelectedNode();
-            if(node)formData.orgId=node.id;
-            
             var json = mini.encode(formData);
             var url = /*[[@{{funcPath}/save(funcPath=${funcPath})}]]*/;
             $.ajax({
@@ -305,7 +269,6 @@
                     if(res.success){
                         editWindow.hide();
                         search();
-                        tree.reload();
                         mini.alert('保存成功！');
                     } else {
                         mini.alert(res.error);

@@ -87,12 +87,11 @@ public class SysOptionServiceImpl extends BaseService<SysOptionQuery> implements
 			Map<String,Object> insertdata=new HashMap<>();
 			insertdata.put("option_code", data.getOptionCode());
 			insertdata.put("option_name", data.getOptionName());
-			insertdata.put("user_flag", data.getUserFlag());
 			insertdata.put("memo", data.getMemo());
 			insert.doInsert("sys_option", insertdata);
 		}else {
-			String sql="update sys_option set option_code=?,option_name=?,user_flag=?,memo=? where id=?";
-			Object[] arg=new Object[] {data.getOptionCode(),data.getOptionName(),data.getUserFlag(),
+			String sql="update sys_option set option_code=?,option_name=?,memo=? where id=?";
+			Object[] arg=new Object[] {data.getOptionCode(),data.getOptionName(),
 					data.getMemo(),docId};
 			update.doUpdate(sql, arg);
 		}
@@ -153,7 +152,7 @@ public class SysOptionServiceImpl extends BaseService<SysOptionQuery> implements
 		BufferedReader buffer = new BufferedReader(new InputStreamReader(resource, "UTF-8"));
 		buffer.readLine();//去掉标题行
 		String line = null;
-		String sql="select option.id as option_id,option.option_code,item.item_id from sys_option option left join sys_option_item item on option.id=item.option_id";
+		String sql="select so.id as option_id,so.option_code,item.item_id,item.item_name from sys_option so left join sys_option_item item on so.id=item.option_id";
         List<Map<String, Object>> options = select.doQuery(sql);
         List<Map<String, Object>> txtOptions=new ArrayList<Map<String, Object>>();
 		while ((line = buffer.readLine()) != null) {
@@ -162,23 +161,24 @@ public class SysOptionServiceImpl extends BaseService<SysOptionQuery> implements
             String ss[] = line.split(",");
 
             // 一行五个长度
-            if (ss.length < 5) {
+            if (ss.length < 4) {
                 continue;
             }
 
             //获取字典optionCode、optionName
             String optionCode = ss[0] ;
             String optionName = ss[1] ;
-            Boolean userFlag=Boolean.valueOf(ss[2]);
-            String itemId=ss[3];
-            String itemName=ss[4];
+            if (StringUtils.isEmpty(optionCode) || StringUtils.isEmpty(optionName)) {
+                continue;
+            }
+            
+            String itemId=ss[2];
+            String itemName=ss[3];
             Map<String, Object> txtOption=new HashMap<String, Object>();
             txtOption.put("option_code", optionCode);
             txtOption.put("item_id", itemId);
             txtOptions.add(txtOption);
-            if (StringUtils.isEmpty(optionCode) || StringUtils.isEmpty(optionName)) {
-                continue;
-            }
+            
             List<Map<String, Object>> collect = options.stream().filter(v->{
             	return optionCode.equals(v.get("option_code"));
             }).collect(java.util.stream.Collectors.toList());
@@ -186,8 +186,10 @@ public class SysOptionServiceImpl extends BaseService<SysOptionQuery> implements
             	Map<String,Object> optionarg=new HashMap<String,Object>();
             	optionarg.put("option_code", optionCode);
             	optionarg.put("option_name", optionName);
-            	optionarg.put("user_flag", userFlag);
-            	Integer optionId=insert.doInsert("sys_option", optionarg);
+            	
+            	insert.doInsert("sys_option", optionarg);
+            	Map<String, Object> doQueryOne = select.doQueryOne("select id from sys_option where option_code='"+optionCode+"'");
+            	Integer optionId = (Integer)doQueryOne.get("id");
             	
             	Map<String,Object> itemarg=new HashMap<String,Object>();
             	itemarg.put("option_id", optionId);
@@ -201,10 +203,12 @@ public class SysOptionServiceImpl extends BaseService<SysOptionQuery> implements
             	options.add(temp);
             }else {
             	Integer optionId = (Integer) collect.get(0).get("option_id");
+            	update.doUpdate("update sys_option set option_name=? where id=?",new Object[] {optionName,optionId});
+            	
             	List<Map<String, Object>> collect2=collect.stream().filter(v->{
             		return itemId.equals(v.get("item_id"));
             	}).collect(java.util.stream.Collectors.toList());
-            	update.doUpdate("update sys_option set option_name=?,user_flag=? where id=?",new Object[] {optionName,userFlag,optionId});
+            	
             	if(collect2!=null&&collect2.size()>0) {
             		update.doUpdate("update sys_option_item set item_name=? where item_id=? and option_id=?",new Object[] {itemName,itemId,optionId});
             		continue;
@@ -260,9 +264,9 @@ public class SysOptionServiceImpl extends BaseService<SysOptionQuery> implements
 
 	@Override
 	public List<Map<String, Object>> loadOption(String optionName) throws Exception {
-		String sql=" select item.item_name as value,item.item_id as key from sys_option option"
-				+ " left join sys_option_item item on option.id=item.option_id"
-				+ " where option.option_code=?";
+		String sql=" select item.item_name,item.item_id from sys_option so"
+				+ " left join sys_option_item item on so.id=item.option_id"
+				+ " where so.option_code=?";
 		List<Map<String, Object>> result = select.doQuery(sql, new Object[] {optionName});
 		return result;
 	}

@@ -71,14 +71,6 @@ public class SysUserServiceImpl extends BaseService<SysUserQuery> implements Sys
 		if(!StringUtils.isEmpty(t.getUserName())) {
 			sb.append(" and users.user_name='"+t.getUserName()+"'");
 		}
-		
-		if(t.getOrgId()!=null) {
-			if(t.getOrgId()==0) {
-				sb.append(" and users.org_id is null");
-			}else {
-				sb.append(" and users.org_id="+t.getOrgId());
-			}
-		}
 		return sb.toString();
 	}
 
@@ -95,12 +87,7 @@ public class SysUserServiceImpl extends BaseService<SysUserQuery> implements Sys
 			arg.put("status", data.getStatus());
 			arg.put("valid_date", data.getValidDate());
 			arg.put("memo", data.getMemo());
-			if(data.getOrgId()==0) {
-				arg.put("org_id", null);
-			}else {
-				arg.put("org_id", data.getOrgId());
-			}
-			arg.put("order_no", getOrderNo(data.getOrgId()));
+			arg.put("order_no", getOrderNo());
 			PasswordEncoder userPasswordEncoder = new BCryptPasswordEncoder();
 			arg.put("web_pwd", userPasswordEncoder.encode("888888"));
 			insert.doInsert("sys_user", arg);
@@ -114,15 +101,10 @@ public class SysUserServiceImpl extends BaseService<SysUserQuery> implements Sys
 		}
 	}
 	
-	private Integer getOrderNo(Integer orgId) throws Exception{
-		String sql="";
-		if(orgId==0) {
-			sql="select coalesce(max(order_no),0)+1 as order_no from sys_user where org_id is null";
-		}else {
-			sql="select coalesce(max(order_no),0)+1 as order_no from sys_user where org_id="+orgId;
-		}
+	private Integer getOrderNo() throws Exception{
+		String sql="select coalesce(max(order_no),0)+1 as order_no from sys_user";
 		Map<String, Object> map = select.doQueryOne(sql);
-		Integer orderNo=(Integer)map.get("order_no");
+		Integer orderNo=((Long)map.get("order_no")).intValue();
 		return orderNo;
 	}
 
