@@ -127,18 +127,15 @@ public class SysFuncServiceImpl extends BaseService<SysFuncQuery> implements Sys
 		sql.append(" func.id funcId,func.func_name,func.func_code,func.icon_cls as funcIconCls,func.group_id");
 		sql.append(" from sys_func func");
 		sql.append(" left join sys_func_group funcGroup on func.group_id=funcGroup.id");
-		sql.append(" left join sys_role_func roleFunc on func.id=roleFunc.func_id");
-		sql.append(" left join sys_role role on roleFunc.role_id=role.id");
-		sql.append(" left join sys_user_role userRole on userRole.role_id=role.id");
-		sql.append(" left join sys_user users on userRole.user_id=users.id");
+//		sql.append(" left join sys_role_func roleFunc on func.id=roleFunc.func_id");
+//		sql.append(" left join sys_role role on roleFunc.role_id=role.id");
+//		sql.append(" left join sys_user_role userRole on userRole.role_id=role.id");
+//		sql.append(" left join sys_user users on userRole.user_id=users.id");
 		sql.append(" where func.status=1");
 		sql.append(" and funcGroup.status=1");
 //		sql.append(" and role.status=1");
 //		sql.append(" and users.status=1");
-		LoginUser loginuser=LoginUser.getLoginUser();
-		if(loginuser!=null && !loginuser.isAdmin()) {
-			sql.append(" and user.id="+loginuser.getId());
-		}
+		
 		List<Map<String, Object>> groupFuncs = select.doQuery(sql.toString());
 		if(groupFuncs==null||groupFuncs.size()==0) {
 			log.info("该用户还没有系统权限，请联系管理员!");

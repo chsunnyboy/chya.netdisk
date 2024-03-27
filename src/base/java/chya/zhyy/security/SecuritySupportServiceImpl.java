@@ -46,22 +46,7 @@ public class SecuritySupportServiceImpl implements SecuritySupportService {
 				return false;
 			}
 			//根据角色ID获取权限
-			Boolean hasRole = false;
-			for(GrantedAuthority authority:authorities) {
-				String roleId = authority.getAuthority();
-				StringBuffer sql=new StringBuffer();
-				sql.append(" select func.* from sys_role_func roleFunc");
-				sql.append(" left join sys_func func on roleFunc.func_id=func.id");
-				sql.append(" where roleFunc.role_id="+roleId);
-				sql.append(" and func.func_code='"+funccode+"'");
-				
-				List<SysFunc> funcs = select.query(SysFunc.class, sql.toString());
-				if(funcs!=null&&funcs.size()>0) {
-					hasRole=true;
-					break;
-				}
-			}
-			
+			Boolean hasRole = true;
 			return hasRole;
 		} catch (Exception e) {
 			log.info("获取用户权限失败"+e.getMessage());

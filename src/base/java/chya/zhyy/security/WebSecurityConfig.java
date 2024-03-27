@@ -32,7 +32,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	};
 	
 	public final static String[] excludeUrl = {"/css/**", "/js/**", "/image/**","/img/**", "/font/", "/favicon.ico", 
-			"**/favicon.ico", "/lib/**", "/static/**","/fonts/**" };
+			"**/favicon.ico", "/lib/**", "/static/**","/fonts/**","/scripts/**" };
 	
 	
 	@Autowired UserDetailsService userDetailsService;

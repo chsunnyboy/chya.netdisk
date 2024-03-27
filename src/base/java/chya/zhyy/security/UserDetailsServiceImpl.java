@@ -31,8 +31,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         // 这里可以获取权限的一些信息，这里具有全部权限， 后期可以加权限（参考IBS SecurityService）  TODO
         ArrayList<GrantedAuthority> authorities = new ArrayList<>();
-        List<UserRoles> userRoles = securitySupportService.findUserRoles(username);
-        authorities.addAll(userRoles);
+//        List<UserRoles> userRoles = securitySupportService.findUserRoles(username);
+//        authorities.addAll(userRoles);
 
         Integer status = user.getStatus();
         Boolean enabled=(status==1?true:false);
